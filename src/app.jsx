@@ -34,6 +34,7 @@ export function App() {
   const lenisRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [theme, setTheme] = useState('light');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const titleText = "STREET FURY";
   const titleChars = titleText.split("");
@@ -195,13 +196,17 @@ export function App() {
           {/* Dynamically imported SFLogo instead of logo.png */}
           <img src={SFLogo} alt="Street Fury" className="logo" />
         </div>
-        <div className="nav-right">
-          <a href="#" onClick={handleNavClick}>Events</a>
-          <a href="#" onClick={handleNavClick}>About</a>
-          <a href="#" onClick={handleNavClick}>Gallery</a>
-          <a href="#" onClick={handleNavClick}>Contact</a>
-          <span style={{opacity: 0.2}}>&bull;</span>
-          <a href="#" onClick={toggleTheme}>Theme ({theme === 'light' ? 'Dark' : 'Light'})</a>
+        <div className={`nav-right ${isMobileMenuOpen ? 'menu-open' : ''}`}>
+          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>Events</a>
+          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>About</a>
+          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>Gallery</a>
+          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>Contact</a>
+          <span className="nav-separator" style={{opacity: 0.2}}>&bull;</span>
+          <a href="#" onClick={(e) => { toggleTheme(e); setIsMobileMenuOpen(false); }}>Theme ({theme === 'light' ? 'Dark' : 'Light'})</a>
+        </div>
+        <div className="hamburger" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+           <span className={`bar ${isMobileMenuOpen ? 'open' : ''}`}></span>
+           <span className={`bar ${isMobileMenuOpen ? 'open' : ''}`}></span>
         </div>
       </nav>
 

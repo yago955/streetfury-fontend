@@ -4,7 +4,6 @@
     --text-color: #111111;
     --accent: #111111;
     --logo-filter: none; /* Assuming SFLogo is black text */
-    --nav-mix: difference;
     --footer-bg: transparent; /* or same as panel-bg */
 }
 
@@ -14,7 +13,6 @@
     --text-color: #f0f0f0;
     --accent: #f0f0f0;
     --logo-filter: invert(1); /* Flips black logo to white */
-    --nav-mix: normal;
 }
 
 * {
@@ -76,13 +74,8 @@ img {
     display: flex;
     gap: 3rem;
     font-weight: 500;
-    mix-blend-mode: var(--nav-mix);
-    color: white; 
+    color: var(--text-color); 
     transition: color 0.5s ease;
-}
-
-:root[data-theme="dark"] .nav-right {
-    color: var(--text-color);
 }
 
 .nav-right a {
@@ -95,6 +88,26 @@ img {
     transition: opacity 0.3s ease;
 }
 .nav-right a:hover { opacity: 0.6; }
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 101;
+}
+.hamburger .bar {
+    width: 30px;
+    height: 2px;
+    background-color: var(--text-color);
+    transition: all 0.3s ease;
+}
+.hamburger .bar.open:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.hamburger .bar.open:nth-child(2) {
+    transform: translateY(-8px) rotate(-45deg);
+}
 
 /* HERO SECTION */
 .hero {
@@ -121,12 +134,13 @@ img {
     overflow: hidden;
     margin-bottom: -1vh;
     text-align: center;
+    padding-bottom: 2rem;
 }
 
 .hero-title {
     font-size: 15vw; 
-    line-height: 0.85;
-    letter-spacing: -0.05em;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
     white-space: nowrap;
 }
 
@@ -495,6 +509,30 @@ img {
 @keyframes scaleUp { to { transform: scale(1); } }
 
 @media (max-width: 1024px) {
+    .hamburger {
+        display: flex;
+    }
+    .nav-right {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--bg-color);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: right 0.4s ease;
+        z-index: 100;
+        gap: 2rem;
+    }
+    .nav-right.menu-open {
+        right: 0;
+    }
+    .nav-separator {
+        display: none;
+    }
+
     .layout-editorial-pinned { height: auto; position: relative; gap: 4rem; overflow: visible; flex-direction: column; margin-bottom: 5rem; }
     .layout-left-scroller { will-change: auto; transform: none !important; }
     .layout-right-pinned { width: 100%; position: relative; justify-content: center; }
