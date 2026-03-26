@@ -346,6 +346,9 @@ export function App() {
           </div>
           
           <div className="footer-v2-bottom">
+            <div className="footer-email">
+                <a href="mailto:operations@streetfury.in">operations@streetfury.in</a>
+            </div>
             <div className="footer-socials">
                 <a href="https://www.instagram.com/streetfuryofficial?igsh=dzFkMjFrdm0wa253" target="_blank" rel="noopener noreferrer">Instagram</a>
                 <a href="https://www.youtube.com/@Streetfuryofficial" target="_blank" rel="noopener noreferrer">YouTube</a>

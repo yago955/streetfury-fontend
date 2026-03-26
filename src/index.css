@@ -467,10 +467,18 @@ img {
 
 .footer-v2-bottom {
     display: flex;
-    justify-content: flex-end; /* Align socials to right */
+    justify-content: space-between; 
+    align-items: center;
     padding-top: 2rem;
     border-top: 1px solid rgba(150, 150, 150, 0.2);
 }
+.footer-email {
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+.footer-email a { color: var(--text-color); opacity: 0.8; text-decoration: none; transition: opacity 0.3s; }
+.footer-email a:hover { opacity: 1; }
 .footer-socials {
     display: flex;
     gap: 3rem;
