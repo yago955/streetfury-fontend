@@ -88,6 +88,8 @@ export function App() {
       heroScrollTl.to({}, { duration: 1 }); 
       heroScrollTl.to('.hero-top-text', { opacity: 0, y: -30, duration: 1.5 });
       heroScrollTl.to('.hero-title-container', { scale: 0.92, opacity: 0.15, y: '-10vh', duration: 2.5 }, "-=0.2");
+      heroScrollTl.to('.hero-bg-image', { scale: 1.12, duration: 3 }, 0);
+      heroScrollTl.to('.hero-overlay', { opacity: 1.5, duration: 3 }, 0);
 
       gsap.to('.navbar', {
         scrollTrigger: { trigger: '.main-landing-wrapper', start: 'top 5%', toggleActions: 'play none none reverse' },
@@ -218,15 +220,28 @@ export function App() {
       )}
 
       <section className="hero">
-        <div className="hero-top-text" style={{ transform: 'translateY(-20px)', opacity: 0 }}>
-          <p>“Street culture collective<br/>from Northeast India.”</p>
-        </div>
-        <div className="hero-title-container">
-          <h1 className="hero-title">
-            {titleChars.map((char, index) => (
-               <span key={index} className="hero-char">{char === " " ? "\u00A0" : char}</span>
-            ))}
-          </h1>
+        {/* Full-bleed background image */}
+        <img
+          src="/hero-bg.jpg"
+          alt="Street Fury community"
+          className="hero-bg-image"
+          draggable="false"
+        />
+        {/* Cinematic gradient overlay */}
+        <div className="hero-overlay" />
+
+        {/* Text content layer */}
+        <div className="hero-content">
+          <div className="hero-top-text" style={{ transform: 'translateY(-20px)', opacity: 0 }}>
+            <p>"Street culture collective<br/>from Northeast India."</p>
+          </div>
+          <div className="hero-title-container">
+            <h1 className="hero-title">
+              {titleChars.map((char, index) => (
+                 <span key={index} className="hero-char">{char === " " ? "\u00A0" : char}</span>
+              ))}
+            </h1>
+          </div>
         </div>
       </section>
 
