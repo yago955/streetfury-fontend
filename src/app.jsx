@@ -99,35 +99,6 @@ export function App() {
       // Background color dynamic to theme, so we can't hardcode GSAP bg color shift. 
       // It's handled by pure CSS custom properties now.
 
-      // SECTION 1: GSAP RIGID PIN
-      const images = gsap.utils.toArray('.stacked-img');
-      const fallbacks = gsap.utils.toArray('.image-fallback');
-      const textScroller = document.querySelector('.layout-left-scroller');
-      
-      if (images[0]) gsap.set(images[0], { opacity: 1 });
-      if (fallbacks[0]) gsap.set(fallbacks[0], { opacity: 1 });
-
-      const pinnedTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.layout-editorial-pinned',
-          start: 'top top', 
-          end: '+=250%', 
-          scrub: 1,
-          pin: true,
-          pinSpacing: true
-        }
-      });
-
-      pinnedTl.to(textScroller, { y: -150, duration: 6, ease: 'none' }, 0);
-      
-      pinnedTl.to([images[0], fallbacks[0]], { opacity: 0, duration: 2 }, 1)
-              .to([images[1], fallbacks[1]], { opacity: 1, duration: 2 }, 1);
-              
-      pinnedTl.to([images[1], fallbacks[1]], { opacity: 0, duration: 2 }, 4)
-              .to([images[2], fallbacks[2]], { opacity: 1, duration: 2 }, 4);
-
-      pinnedTl.to({}, { duration: 1.5 });
-
       // CASCADING SECTION REVEALS
       const revealSections = gsap.utils.toArray('.reveal-section:not(.layout-editorial-pinned, .about-section)');
       revealSections.forEach((sec) => {
@@ -185,24 +156,39 @@ export function App() {
     }
   }, [selectedImage]);
 
-  const handleNavClick = (e) => {
+  const handleNavClick = (e, targetId) => {
     e.preventDefault();
-    gsap.timeline().to(e.currentTarget, { scale: 1.03, duration: 0.15, ease: 'power2.out' }).to(e.currentTarget, { scale: 1, duration: 0.15, ease: 'power2.in' });
+    gsap.timeline()
+      .to(e.currentTarget, { scale: 1.03, duration: 0.15, ease: 'power2.out' })
+      .to(e.currentTarget, { scale: 1, duration: 0.15, ease: 'power2.in' });
+
+    const targetElement = document.querySelector(targetId);
+    if (targetElement && lenisRef.current) {
+      const navbar = document.querySelector('.navbar');
+      const offset = navbar ? navbar.offsetHeight : 80;
+      lenisRef.current.scrollTo(targetElement, {
+        offset: -offset,
+        duration: 1.5,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
+    }
   };
 
   return (
     <div ref={containerRef} className="app-container">
       
       <nav className="navbar">
-        <div className="nav-left" onClick={handleNavClick}>
+        <div className="nav-left" onClick={(e) => handleNavClick(e, '#home')}>
           {/* Dynamically imported SFLogo instead of logo.png */}
           <img src={SFLogo} alt="Street Fury" className="logo" />
         </div>
         <div className={`nav-right ${isMobileMenuOpen ? 'menu-open' : ''}`}>
-          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>Events</a>
-          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>About</a>
-          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>Gallery</a>
-          <a href="#" onClick={(e) => { handleNavClick(e); setIsMobileMenuOpen(false); }}>Contact</a>
+          <a href="#home" onClick={(e) => { handleNavClick(e, '#home'); setIsMobileMenuOpen(false); }}>Home</a>
+          <a href="#about" onClick={(e) => { handleNavClick(e, '#about'); setIsMobileMenuOpen(false); }}>About</a>
+          <a href="#team" onClick={(e) => { handleNavClick(e, '#team'); setIsMobileMenuOpen(false); }}>Team</a>
+          <a href="#events" onClick={(e) => { handleNavClick(e, '#events'); setIsMobileMenuOpen(false); }}>Events</a>
+          <a href="#gallery" onClick={(e) => { handleNavClick(e, '#gallery'); setIsMobileMenuOpen(false); }}>Gallery</a>
+          <a href="#contact" onClick={(e) => { handleNavClick(e, '#contact'); setIsMobileMenuOpen(false); }}>Contact</a>
           <span className="nav-separator" style={{opacity: 0.2}}>&bull;</span>
           <a href="#" onClick={(e) => { toggleTheme(e); setIsMobileMenuOpen(false); }}>Theme ({theme === 'light' ? 'Dark' : 'Light'})</a>
         </div>
@@ -219,7 +205,7 @@ export function App() {
         </div>
       )}
 
-      <section className="hero">
+      <section id="home" className="hero">
         {/* Full-bleed background image */}
         <img
           src="/hero-bg.jpg"
@@ -247,29 +233,46 @@ export function App() {
 
       <div className="main-landing-wrapper">
         
-        {/* SECTION 1: Rigid Pin GSAP Scroll */}
-        <section className="layout-editorial-pinned">
-          <div className="layout-left-scroller">
-            <div className="single-text-block">
-              <h2>Event Series</h2>
-              <p>— High-energy street gatherings blending skateboarding, BMX, and live music into one continuous experience.</p>
-              <br/>
-              <p>We don’t just organize events — we create spaces where movement, music, and identity collide. Experience the raw energy.</p>
-              <a href="#" className="cta-link">→ Explore Events</a>
-            </div>
+        {/* SECTION 1: Events Section */}
+        <section id="events" className="reveal-section event-section">
+          <div className="event-poster-container">
+            <img 
+              src="/images/events/go-skate-day-2026-poster.jpg" 
+              alt="Guwahati Go Skate Day 2026 Poster" 
+              className="event-poster-img"
+              draggable="false"
+            />
           </div>
-          
-          <div className="layout-right-pinned">
-            <div className="pinned-image-stack parallax-img">
-              <div className="image-fallback fb-1">Image 1</div>
-              <img src="/img1.jpg" alt="Event 1" className="stacked-img img-1" onError={(e) => { e.target.style.display='none'; e.target.previousSibling.style.display='flex'; }} />
-              
-              <div className="image-fallback fb-2">Image 2</div>
-              <img src="/img2.jpg" alt="Event 2" className="stacked-img img-2" onError={(e) => { e.target.style.display='none'; e.target.previousSibling.style.display='flex'; }} />
-              
-              <div className="image-fallback fb-3">Image 3</div>
-              <img src="/img3.jpg" alt="Event 3" className="stacked-img img-3" onError={(e) => { e.target.style.display='none'; e.target.previousSibling.style.display='flex'; }} />
+          <div className="event-text-container">
+            <h2 className="event-heading">GUWAHATI GO SKATE DAY 2026</h2>
+            <div className="event-paragraphs">
+              <p>The wheels are rolling back into Guwahati.</p>
+              <p>Join us at NF Railway Skatepark for Go Skate Day 2026, a full-day celebration of skateboarding, creativity, music, and street culture. From first-timers stepping on a board for the very first time to seasoned riders battling it out in the Street Fury Skate League Finals, this is where the city's skate scene comes alive.</p>
+              <p>Expect open sessions, the legendary Game of SKATE, community jams, live music, giveaways, and non-stop energy from sunrise to sundown. Whether you're skating, spectating, filming, or just soaking in the atmosphere, this is your invitation to be part of a movement that continues to push skateboarding and youth culture forward in Northeast India.</p>
+              <p>One park. One community. One day to skate.</p>
             </div>
+            <div className="event-info-list">
+              <div className="event-info-item">
+                <span className="event-info-icon">📍</span>
+                <span className="event-info-val">NF Railway Skatepark, Guwahati</span>
+              </div>
+              <div className="event-info-item">
+                <span className="event-info-icon">🗓️</span>
+                <span className="event-info-val">20 June 2026</span>
+              </div>
+              <div className="event-info-item">
+                <span className="event-info-icon">🛹</span>
+                <span className="event-info-val">Street Fury Skate League Finals</span>
+              </div>
+              <div className="event-info-item">
+                <span className="event-info-icon">🎸</span>
+                <span className="event-info-val">Live performances by Anita, 5 Stacks Height, After Dark & Arseniic</span>
+              </div>
+            </div>
+            <p className="event-conclusion">
+              No matter your skill level—grab your board, bring your crew, and celebrate Go Skate Day the way it's meant to be celebrated: loud, fast, and together.
+            </p>
+            <a href="#contact" className="cta-link" onClick={(e) => handleNavClick(e, '#contact')}>→ Explore Events</a>
           </div>
         </section>
 
@@ -303,7 +306,7 @@ export function App() {
         </section>
 
         {/* SECTION 4: Gallery Grid (Staggered 3:4 blocks) */}
-        <section className="reveal-section gallery-section">
+        <section id="gallery" className="reveal-section gallery-section">
           <div className="gallery-header">
             <h2>Street Fury Gallery</h2>
             <p>A glimpse into the movement — moments captured from sessions, events, and everything in between.</p>
@@ -318,7 +321,7 @@ export function App() {
         </section>
 
         {/* SECTION 5: About Section Core Text - SCROLL FADE FOCUS */}
-        <section className="about-section" style={{ minHeight: '80vh', padding: '10rem 4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <section id="about" className="about-section" style={{ minHeight: '80vh', padding: '10rem 4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div className="about-manifesto">
             {manifestoLines.map((line, i) => (
                <p key={i} className="manifesto-line">{line}</p>
@@ -326,8 +329,66 @@ export function App() {
           </div>
         </section>
 
+        {/* SECTION 6: Team Section */}
+        <section id="team" className="reveal-section team-section">
+          <div className="team-header">
+            <h2>The Crew</h2>
+            <p>The driving force behind Street Fury — riders, builders, and creators pushing action sports culture forward.</p>
+          </div>
+          <div className="team-grid">
+            <div className="team-card">
+              <div className="team-card-image-wrapper">
+                <img src="/images/team/bikram-sarkar.jpg" alt="Bikram Sarkar" className="team-card-img" />
+              </div>
+              <div className="team-card-content">
+                <h3 className="team-card-name">Bikram Sarkar</h3>
+                <div className="team-card-nickname">Known as BikramBMX</div>
+                <div className="team-card-title">Founder, Street Fury | Professional BMX Flatland Rider</div>
+                <div className="team-card-tagline">Building the future of BMX and action sports culture in Northeast India.</div>
+                <div className="team-card-bio">
+                  <p>Bikram Sarkar, widely known as BikramBMX, is the founder of Street Fury and a professional BMX Flatland rider from Assam, India. Passionate about action sports and youth culture, he is dedicated to growing the BMX and skateboarding community through events, competitions, workshops, and grassroots initiatives.</p>
+                  <p>Since founding Street Fury in 2023, Bikram has worked to create opportunities for riders and athletes while promoting action sports across the region. Through his riding, event management, and community-building efforts, he continues to inspire and support the next generation of action sports enthusiasts.</p>
+                  <p>His vision is to build a strong and inclusive platform that develops talent, promotes creativity, and advances BMX, skateboarding, and urban culture throughout India.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="team-card">
+              <div className="team-card-image-wrapper">
+                <img src="/images/team/ashish-das.jpg" alt="Ashish Das" className="team-card-img" />
+              </div>
+              <div className="team-card-content">
+                <h3 className="team-card-name">Ashish Das</h3>
+                <div className="team-card-title">Skateboarder | Downhill Longboarder | Coach | Community Builder</div>
+                <div className="team-card-tagline">Growing skateboarding culture and empowering the next generation of riders.</div>
+                <div className="team-card-bio">
+                  <p>Ashish Das is a skateboarder, downhill longboarder, coach, and community builder from Guwahati, Assam. Through Street Fury and Skate Guwahati, he has spent years developing skateboarding culture across Northeast India through coaching programs, events, competitions, and grassroots community initiatives.</p>
+                  <p>Driven by a deep passion for action sports and youth culture, Ashish continues to push progression both on and off the board. His dedication to mentorship and community development has helped create opportunities for new riders while strengthening the region's skateboarding ecosystem.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="team-card">
+              <div className="team-card-image-wrapper">
+                <img src="/images/team/anubhab-baruah.jpg" alt="Anubhab Baruah" className="team-card-img" />
+              </div>
+              <div className="team-card-content">
+                <h3 className="team-card-name">Anubhab Baruah</h3>
+                <div className="team-card-nickname">Known as Bob</div>
+                <div className="team-card-title">Filmmaker & Web Developer</div>
+                <div className="team-card-tagline">Combining storytelling, technology, and creative media to inspire communities.</div>
+                <div className="team-card-bio">
+                  <p>Anubhab Baruah is a filmmaker and web developer from Assam with a passion for storytelling, digital innovation, and creative media. Blending technical expertise with visual creativity, he has contributed to a variety of projects in filmmaking, content creation, and web development.</p>
+                  <p>Through his work, Anubhab aims to create impactful digital experiences and document stories that inspire communities and youth culture. At Street Fury, he is responsible for visual storytelling, media production, content development, and digital experiences that showcase the growth of action sports across the region.</p>
+                  <p><strong>Role at Street Fury:</strong> Filmmaker & Web Developer — responsible for visual storytelling, media production, content creation, and digital development for Street Fury events, campaigns, and community initiatives.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* FOOTER v2 Exact Match to Brief */}
-        <footer className="footer-v2">
+        <footer id="contact" className="footer-v2">
           <div className="footer-v2-main">
             
             <div className="footer-v2-col-left">
@@ -338,10 +399,10 @@ export function App() {
             
             <div className="footer-v2-links">
                <div className="footer-v2-nav-col">
-                 <a href="#">Events</a>
-                 <a href="#">About</a>
-                 <a href="#">Gallery</a>
-                 <a href="#">Contact</a>
+                 <a href="#events" onClick={(e) => handleNavClick(e, '#events')}>Events</a>
+                 <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
+                 <a href="#gallery" onClick={(e) => handleNavClick(e, '#gallery')}>Gallery</a>
+                 <a href="#contact" onClick={(e) => handleNavClick(e, '#contact')}>Contact</a>
                </div>
                <div className="footer-v2-nav-col">
                  <a href="#">Press</a>

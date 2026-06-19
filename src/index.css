@@ -15,6 +15,10 @@
     --logo-filter: invert(1); /* Flips black logo to white */
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -28,6 +32,16 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.8s ease, color 0.8s ease;
+}
+
+#home, #about, #team, #events, #gallery, #contact {
+    scroll-margin-top: 160px; /* Offset for desktop fixed navbar */
+}
+
+@media (max-width: 1024px) {
+    #home, #about, #team, #events, #gallery, #contact {
+        scroll-margin-top: 100px; /* Offset for tablet/mobile fixed navbar */
+    }
 }
 
 h1, h2, h3, .heading-font {
@@ -429,6 +443,194 @@ img {
     opacity: 0.15; /* Default GSAP start */
 }
 
+/* EVENTS SECTION (Go Skate Day 2026 Layout) */
+.event-section {
+    max-width: 900px;
+    margin: 0 auto 12rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+    padding: 0 4rem;
+}
+.event-poster-container {
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+    background-color: var(--panel-bg);
+}
+:root[data-theme="dark"] .event-poster-container {
+    box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+}
+.event-poster-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+.event-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+}
+.event-heading {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    font-size: 5rem;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text-color);
+}
+.event-paragraphs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.85;
+}
+.event-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-left: 3px solid var(--text-color);
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+.event-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+.event-info-icon {
+    font-size: 1.4rem;
+    display: inline-block;
+    width: 2rem;
+}
+.event-info-val {
+    color: var(--text-color);
+}
+.event-conclusion {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* S6: TEAM SECTION */
+.team-section .team-header {
+    margin-bottom: 4rem;
+    max-width: 600px;
+}
+.team-header h2 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+.team-header p {
+    font-size: 1.35rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: 4rem;
+}
+.team-card {
+    background: var(--bg-color);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, background-color 0.8s ease;
+}
+.team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+:root[data-theme="dark"] .team-card {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+:root[data-theme="dark"] .team-card:hover {
+    box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+}
+.team-card-image-wrapper {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--panel-bg);
+}
+.team-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.team-card-content {
+    padding: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.team-card-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+}
+.team-card-nickname {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.5;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.team-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.85;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+.team-card-tagline {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text-color);
+    border-left: 3px solid var(--text-color);
+    padding-left: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+.team-card-bio {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.75;
+    flex-grow: 1;
+}
+.team-card-bio p {
+    margin-bottom: 0.75rem;
+}
+.team-card-bio p:last-child {
+    margin-bottom: 0;
+}
+
 
 /* FINAL FOOTER DESIGN V3 (Written Spec matching Theme) */
 .footer-v2 {
@@ -585,6 +787,19 @@ img {
 @media (max-width: 1024px) {
     .hamburger { display: flex; }
 
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .event-section {
+        gap: 2.5rem;
+        padding: 0 2rem;
+    }
+    .event-heading {
+        font-size: 3.5rem;
+    }
+
     .nav-right {
         position: fixed;
         top: 0;
@@ -641,6 +856,47 @@ img {
 @media (max-width: 640px) {
     /* Navbar */
     .navbar { padding: 1.5rem 1.5rem; }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .event-section {
+        gap: 2rem;
+        padding: 0 1.5rem;
+    }
+    .event-heading {
+        font-size: 2.4rem;
+    }
+    .event-paragraphs {
+        font-size: 1.05rem;
+        gap: 1rem;
+    }
+    .event-info-list {
+        padding-left: 1rem;
+    }
+    .event-info-item {
+        font-size: 1.05rem;
+    }
+    .event-conclusion {
+        font-size: 1.05rem;
+    }
+    .team-section .team-header {
+        margin-bottom: 2.5rem;
+    }
+    .team-header h2 {
+        font-size: 2.6rem;
+    }
+    .team-header p {
+        font-size: 1.1rem;
+    }
+    .team-card-content {
+        padding: 1.5rem;
+    }
+    .team-card-name {
+        font-size: 1.8rem;
+    }
     .logo { height: 52px; }
 
     /* Hero */
